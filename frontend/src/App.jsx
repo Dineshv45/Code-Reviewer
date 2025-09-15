@@ -9,6 +9,9 @@ import "highlight.js/styles/github-dark.css";
 
 import "./App.css";
 
+// ✅ Added: get API base URL from environment variable
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // <-- update done here
+
 function App() {
   const [code, setCode] = useState(`function sum(){
   return 1+1 
@@ -26,14 +29,12 @@ function App() {
     setLoading(true);
     setReview(""); // clear previous result
     try {
-      const response = await axios.post(
-  `${process.env.REACT_APP_API_URL}/ai/get-review`,
-  { code }
-);
+      // ✅ Updated: use API_BASE_URL instead of hardcoding
+      const response = await axios.post(`${API_BASE_URL}/ai/get-review`, { code }); // <-- update done here
 
       setReview(response.data);
     } catch (err) {
-      setReview("❌ Error fetching review. Please try again.");
+      setReview("Error fetching review. Please try again.");
     } finally {
       setLoading(false);
       if (reviewRef.current) {

@@ -9,8 +9,7 @@ import "highlight.js/styles/github-dark.css";
 
 import "./App.css";
 
-// ✅ Added: get API base URL from environment variable
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // <-- update done here
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function App() {
   const [code, setCode] = useState(`function sum(){
@@ -29,8 +28,7 @@ function App() {
     setLoading(true);
     setReview(""); // clear previous result
     try {
-      // ✅ Updated: use API_BASE_URL instead of hardcoding
-      const response = await axios.post(`${API_BASE_URL}/ai/get-review`, { code }); // <-- update done here
+      const response = await axios.post(`${API_BASE_URL}/ai/get-review`, { code }); 
 
       setReview(response.data);
     } catch (err) {

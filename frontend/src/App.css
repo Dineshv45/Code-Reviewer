@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  height: 100%;
+  width: 100%;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+main .left,
+main .right {
+  height: 100%;
+  flex-basis: 50%;
+  border-radius: 0.7rem;
+}
+
+main .left {
+  background-color: #000;
+  position: relative;
+}
+
+.left .code,
+.code pre,
+.code pre code {
+  height: 100%;
+  width: 100%;
+  border-radius: 0.7rem;
+  margin: 0;
+  background: #1e1e1e;
+}
+
+.review-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: rgb(204, 204, 213);
+  color: black;
+  padding: 0.5rem 2rem;
+  border-radius: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.3s;
+  border: none;
+}
+
+.review-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.review-btn:hover:not(:disabled) {
+  background-color: rgb(170, 170, 180);
+}
+
+.right {
+  flex: 1;
+  padding: 10px;
+  background: #343434;
+  color: #fff;
+  border-radius: 5px;
+
+  overflow-y: auto;
+  overflow-x: auto;
+
+  max-height: 100vh;
+  white-space: pre-wrap;
+}
+
+/* Loader Container */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 290px; /* pushes it down */
+  gap: 6px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #09f;
+  letter-spacing: 2px;
+}
+
+/* Each letter */
+.letter {
+  display: inline-block;
+  animation: bounceLetters 0.6s infinite alternate;
+}
+
+/* Delay for each letter */
+.letter:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.letter:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.letter:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+@keyframes bounceLetters {
+  from {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(-12px);
+    opacity: 1;
+  }
+}

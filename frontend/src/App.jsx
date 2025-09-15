@@ -26,9 +26,11 @@ function App() {
     setLoading(true);
     setReview(""); // clear previous result
     try {
-      const response = await axios.post("http://localhost:3000/ai/get-review", {
-        code,
-      });
+      const response = await axios.post(
+  `${process.env.REACT_APP_API_URL}/ai/get-review`,
+  { code }
+);
+
       setReview(response.data);
     } catch (err) {
       setReview("❌ Error fetching review. Please try again.");

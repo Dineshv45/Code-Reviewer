@@ -17,7 +17,7 @@ main {
   padding: 1.5rem;
   display: flex;
   gap: 1rem;
-  flex-direction: row; 
+  flex-direction: row;
 }
 
 main .left,
@@ -102,9 +102,11 @@ main .left {
 .letter:nth-child(2) {
   animation-delay: 0.2s;
 }
+
 .letter:nth-child(3) {
   animation-delay: 0.4s;
 }
+
 .letter:nth-child(4) {
   animation-delay: 0.6s;
 }
@@ -114,6 +116,7 @@ main .left {
     transform: translateY(0);
     opacity: 0.7;
   }
+
   to {
     transform: translateY(-12px);
     opacity: 1;
@@ -123,8 +126,8 @@ main .left {
 /* ---------- responsive: small screens ---------- */
 @media (max-width: 768px) {
   main {
-    flex-direction: column; 
-    gap: 12px; 
+    flex-direction: column;
+    gap: 12px;
   }
 
   main .left,
@@ -146,13 +149,13 @@ main .left {
   .code pre code {
     height: 50vh;
     min-height: 260px;
-    position: relative; 
+    position: relative;
   }
 
-.left .review-btn {
+  .left .review-btn {
     position: absolute;
     bottom: 1px;
-    right: 10px; 
+    right: 10px;
   }
 
   /* bring loader up (less top margin) */
@@ -166,4 +169,3 @@ main .left {
     max-height: calc(100vh - 220px);
   }
 }
-

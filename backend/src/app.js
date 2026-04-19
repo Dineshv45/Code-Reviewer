@@ -1,6 +1,6 @@
-const express = require('express');
-const aiRoutes = require('./routes/ai.routes')
-const cors = require('cors')
+import express from 'express';
+import {router} from './routes/ai.routes.js'
+import cors from 'cors'
 const app = express();
 
 // define routes here
@@ -11,6 +11,8 @@ app.get('/', (req, res) => {
   res.send('Hello world');
 })
 
-app.use('/ai', aiRoutes);
+app.use('/ai', router);
 
-module.exports = app;
+export default app;
+
+

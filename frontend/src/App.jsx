@@ -106,6 +106,7 @@ function App() {
               value={code}
               onChange={(val) => setCode(val)}
               language={language}
+              readOnly={loading}
             />
           </div>
 

@@ -1,11 +1,12 @@
-# AI Code Reviewer
-
+# AI Code Reviewe
 An intelligent, full-stack code analysis platform that provides pedagogical feedback, performance optimization suggestions, and structured debugging using Large Language Models (LLMs).
+
+## 🚀 Live Demo
+https://code-reviewer-sandy-beta.vercel.app
 
 <img width="1356" height="633" alt="image" src="https://github.com/user-attachments/assets/9d137c8d-a824-4bba-9fdd-ff3bd1c4040f" />
 
 ## ✨ Features
-
 - **AI-Driven Feedback**: Delivers structured reviews focusing on logical correctness, security vulnerabilities, and pedagogical learning points.
 - **Complexity Analysis**: Automatically identifies algorithmic complexity and provides Big O notation insights.
 - **Weighted Language Detection**: Features a custom-built statistical scoring algorithm that detects 7+ programming languages by scanning token frequency across 30+ lines of code.

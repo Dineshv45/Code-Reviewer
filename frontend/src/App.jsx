@@ -17,49 +17,74 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("javascript");
 
-  function getFirstMeaningfulLine(code) {
-    
-    const lines = code.split("\n");
+  function detectLanguageWeighted(code) {
+    if (!code) return "";
+    const lines = code.split("\n").slice(0, 30); // scan up to 30 lines
+    let scores = { javascript: 0, python: 0, java: 0, c: 0, cpp: 0, php: 0, html: 0, css: 0 };
 
-    for (let line of lines) {
-      const trimmed = line.trim();
+    for (const line of lines) {
+      const t = line.trim();
+      if (!t) continue;
 
-      if (
-        trimmed === "" ||                 // empty
-        trimmed.startsWith("//") ||       // JS single-line comment
-        trimmed.startsWith("/*") ||       // block comment start
-        trimmed.startsWith("*") ||        // inside block comment
-        trimmed.startsWith("#")           // Python, bash comments
-      ) {
-        continue;
+      // JavaScript
+      if (t.includes("console.log")) scores.javascript += 5;
+      if (t.includes("=>")) scores.javascript += 4;
+      if (t.match(/\b(const|let|var|function|export|import)\b/)) scores.javascript += 3;
+
+      // Python
+      if (t.startsWith("def ")) scores.python += 4;
+      if (t.includes("print(")) scores.python += 3;
+      if (t.match(/\b(elif|import|from)\b/)) scores.python += 2;
+      if (t.endsWith(":")) scores.python += 2;
+
+      // Java
+      if (t.includes("public class")) scores.java += 5;
+      if (t.includes("System.out.println")) scores.java += 5;
+      if (t.includes("public static void main")) scores.java += 10;
+      if (t.includes("import java.")) scores.java += 3;
+
+      // C / C++
+      if (t.startsWith("#include")) {
+        if (t.includes("<iostream>")) scores.cpp += 5;
+        else if (t.includes("<stdio.h>")) scores.c += 5;
+        else { scores.c += 2; scores.cpp += 2; }
       }
+      if (t.includes("int main()")) { scores.c += 4; scores.cpp += 4; }
+      if (t.includes("std::cout")) scores.cpp += 5;
+      if (t.includes("printf(")) scores.c += 4;
+      if (t.includes("using namespace")) scores.cpp += 5;
 
-      return trimmed;
+      // PHP
+      if (t.includes("<?php")) scores.php += 10;
+      if (t.match(/\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/)) scores.php += 2;
+      if (t.includes("echo ")) scores.php += 3;
+      if (t.includes("->")) scores.php += 2;
+
+      // HTML
+      if (t.toLowerCase().includes("<!doctype html>")) scores.html += 10;
+      if (t.match(/<\/?[a-z][\s\S]*>/i)) scores.html += 2; // HTML tags
+
+      // CSS
+      if (t.match(/[a-z-]+:/i)) scores.css += 2; // generic properties like margin: padding:
+      if (t.includes("{") || t.includes("}")) scores.css += 1;
     }
 
-    return "";
+    // Find the max score
+    let detectedLang = "javascript"; // default fallback
+    let maxScore = 0;
+    
+    for (const [lang, score] of Object.entries(scores)) {
+      if (score > maxScore) {
+        maxScore = score;
+        detectedLang = lang;
+      }
+    }
+
+    return maxScore > 0 ? detectedLang : "javascript";
   }
 
   useEffect(() => {
-    const firstLine = getFirstMeaningfulLine(code).toLowerCase();
-
-    if (["function", "const", "let", "var", "import", "export"].some(key => firstLine.includes(key))) {
-      setLanguage("javascript");
-    } else if (firstLine.includes("def ")) {
-      setLanguage("python");
-    } else if (firstLine.includes("public class") || firstLine.includes("import java")) {
-      setLanguage("java");
-    } else if (firstLine.includes("#include <stdio.h>")) {
-      setLanguage("c");
-    } else if (firstLine.includes("#include <iostream>")) {
-      setLanguage("cpp");
-    } else if (firstLine.includes("<?php")) {
-      setLanguage("php");
-    } else if (firstLine.includes("<!doctype html>")) {
-      setLanguage("html");
-    } else {
-      setLanguage("");
-    }
+    setLanguage(detectLanguageWeighted(code));
   }, [code]);
   const reviewRef = useRef(null);
 
@@ -106,7 +131,7 @@ function App() {
         <section className="flex-1 flex flex-col glass-panel overflow-hidden">
           <div className="px-4 py-2 bg-slate-800/50 border-b border-slate-700/50 flex justify-between items-center text-xs font-medium text-slate-400 uppercase tracking-wider">
             <span>Source Code</span>
-            <span className="text-indigo-400">{language.toUpperCase() || "Text"}</span>
+            <span className="text-indigo-400">{language === "cpp" ? "C++" : language.toUpperCase() || "Text"}</span>
           </div>
           <div className="flex-1 overflow-auto relative custom-scrollbar">
             <Editor

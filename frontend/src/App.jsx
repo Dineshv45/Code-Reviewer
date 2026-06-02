@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import rehypeHighLight from "rehype-highlight";
 import "highlight.js/styles/github-dark.css";
 import Editor from "./components/Editor";
+import {toast } from "react-toastify";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -11,11 +12,13 @@ function App() {
   const [code, setCode] = useState(`function sum(){
   return 1+1 
 }`);
+
   const [review, setReview] = useState("");
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("javascript");
 
   function getFirstMeaningfulLine(code) {
+    
     const lines = code.split("\n");
 
     for (let line of lines) {
@@ -61,6 +64,10 @@ function App() {
   const reviewRef = useRef(null);
 
   async function reviewCode() {
+    if (!(code.trim())) {
+      return toast.info("Please enter your code");
+    }
+   
     setLoading(true);
     setReview(""); // clear previous result
     try {
@@ -104,7 +111,11 @@ function App() {
           <div className="flex-1 overflow-auto relative custom-scrollbar">
             <Editor
               value={code}
-              onChange={(val) => setCode(val)}
+              onChange={(val) => {
+                setCode(val);
+                setError(null);
+              }}
+
               language={language}
               readOnly={loading}
             />
